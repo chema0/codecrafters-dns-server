@@ -31,11 +31,13 @@ func main() {
 			break
 		}
 
+		dnsMessage := NewDNSMessage(buf)
+		dnsMessage.setFlags(1, 0, 0, 0, 0, 0, 0, 0)
+
 		receivedData := string(buf[:size])
 		fmt.Printf("Received %d bytes from %s: %s\n", size, source, receivedData)
 
-		// Create an empty response
-		response := []byte{}
+		response := dnsMessage.serialize()
 
 		_, err = udpConn.WriteToUDP(response, source)
 		if err != nil {
